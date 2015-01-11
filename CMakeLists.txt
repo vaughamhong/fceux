@@ -1,7 +1,18 @@
 # ================================================================
+# Generate a project
+# mkdir build
+# cd build
+# cmake -G "XCode" ../
+# cmake -G "Visual Studio 12" ../
+# ================================================================
 
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 PROJECT(fceux)
+
+# ================================================================
+
+# This is where FCEUX finds zlib - and may change from machine to machine
+set(ZLIB_INCLUDE "D:\\Work\\active\\laputa\\external\\nimble\\external\\zlib")
 
 # ================================================================
 
@@ -26,7 +37,7 @@ FILE(GLOB snes_src ${CMAKE_CURRENT_SOURCE_DIR}/libsnes-fceumm/*.c)
 FILE(GLOB snes_inc ${CMAKE_CURRENT_SOURCE_DIR}/libsnes-fceumm/*.h)
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/src)
-INCLUDE_DIRECTORIES(D:\\Work\\active\\laputa\\external\\nimble\\external\\zlib)
+INCLUDE_DIRECTORIES(${ZLIB_INCLUDE})
 
 set(src ${src} ${main_src})
 set(src ${src} ${boards_src})
