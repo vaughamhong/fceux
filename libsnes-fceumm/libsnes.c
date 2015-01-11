@@ -5,7 +5,6 @@
 #else
 #define TRUE 1
 #define FALSE 0
-typedef unsigned char bool;
 #endif
 #include <stdlib.h>
 #include <string.h>
@@ -77,7 +76,7 @@ void FCEUD_SetPalette(unsigned char index, unsigned char r, unsigned char g, uns
    palette[index] = (r << 10) | (g << 5) | (b << 0);
 }
 
-bool FCEUD_ShouldDrawInputAids() { return 1; }
+unsigned char FCEUD_ShouldDrawInputAids() { return 1; }
 void FCEUD_PrintError(const char *c) { }
 void FCEUD_Message(const char *text) { }
 void FCEUD_SoundToggle() { FCEUI_SetSoundVolume(256); }
@@ -366,7 +365,7 @@ void snes_set_input_state(snes_input_state_t cb)
    input_cb = cb;
 }
 
-void snes_set_controller_port_device(bool a, unsigned b)
+void snes_set_controller_port_device(unsigned char a, unsigned b)
 {}
 
 static char g_basename[1024];
@@ -493,7 +492,11 @@ static void update_input(void)
     JSReturn[0] = pad[0] | (pad[1] << 8);
 }
 
+#if defined(WIN32)
+void snes_run(void)
+#else
 EXPORT void snes_run(void)
+#endif
 {
 	unsigned i, y, x, ssize;
 	uint8_t *gfx;
@@ -533,7 +536,7 @@ unsigned snes_serialize_size(void)
    return serialize_size;
 }
 
-bool snes_serialize(uint8_t *data, unsigned size)
+unsigned char snes_serialize(uint8_t *data, unsigned size)
 {
    if (size != snes_serialize_size())
       return FALSE;
@@ -543,7 +546,7 @@ bool snes_serialize(uint8_t *data, unsigned size)
    return TRUE;
 }
 
-bool snes_unserialize(const uint8_t *data, unsigned size)
+unsigned char snes_unserialize(const uint8_t *data, unsigned size)
 {
    if (size != snes_serialize_size())
       return FALSE;
@@ -555,9 +558,9 @@ bool snes_unserialize(const uint8_t *data, unsigned size)
 
 void snes_cheat_reset(void) {}
 
-void snes_cheat_set(unsigned a, bool b, const char* c) { }
+void snes_cheat_set(unsigned a, unsigned char b, const char* c) { }
 
-bool snes_load_cartridge_normal(const char* a, const uint8_t *rom_data, unsigned rom_size)
+unsigned char snes_load_cartridge_normal(const char* a, const uint8_t *rom_data, unsigned rom_size)
 {
 	const char *full_path;
 	struct snes_system_timing timing;
@@ -596,26 +599,26 @@ bool snes_load_cartridge_normal(const char* a, const uint8_t *rom_data, unsigned
    return TRUE;
 }
 
-bool snes_load_cartridge_bsx_slotted(
+unsigned char snes_load_cartridge_bsx_slotted(
   const char* a, const uint8_t* b, unsigned c,
   const char* d, const uint8_t* e, unsigned f
 )
 { return FALSE; }
 
-bool snes_load_cartridge_bsx(
+unsigned char snes_load_cartridge_bsx(
   const char* a, const uint8_t * b, unsigned c,
   const char* d, const uint8_t * e, unsigned f
 )
 { return FALSE; }
 
-bool snes_load_cartridge_sufami_turbo(
+unsigned char snes_load_cartridge_sufami_turbo(
   const char* a, const uint8_t* b, unsigned c,
   const char* d, const uint8_t* e, unsigned f,
   const char* g, const uint8_t* h, unsigned i
 )
 { return FALSE; }
 
-bool snes_load_cartridge_super_game_boy(
+unsigned char snes_load_cartridge_super_game_boy(
   const char* a, const uint8_t* b, unsigned c,
   const char* d, const uint8_t* e, unsigned f
 )
@@ -626,7 +629,7 @@ void snes_unload_cartridge(void)
 	FCEUI_CloseGame();
 }
 
-bool snes_get_region(void)
+unsigned char snes_get_region(void)
 {
    return FSettings.PAL ? SNES_REGION_PAL : SNES_REGION_NTSC;
 }

@@ -168,7 +168,11 @@ static MEMWRAP *MakeMemWrap(void *tz, int type)
  {
   /* Bleck.  The gzip file format has the size of the uncompressed data,
      but I can't get to the info with the zlib interface(?). */
+#if defined(WIN32)
+  for (tmp->size = 0; gzgetc_(tz) != EOF; tmp->size++);
+#else
   for(tmp->size=0; gzgetc(tz) != EOF; tmp->size++);
+#endif
   gzseek(tz,0,SEEK_SET);
   if(!(tmp->data=(uint8 *)FCEU_malloc(tmp->size)))
   {
@@ -516,7 +520,11 @@ int FCEU_read32le(uint32 *Bufo, FCEUFILE *fp)
 int FCEU_fgetc(FCEUFILE *fp)
 {
  if(fp->type==1)
+#if defined(WIN32)
+  return gzgetc_(fp->fp);
+#else
   return gzgetc(fp->fp);
+#endif
  else if(fp->type>=2)
  {
   MEMWRAP *wz;
@@ -536,7 +544,11 @@ uint64 FCEU_fgetsize(FCEUFILE *fp)
   int x,t;
   t=gztell(fp->fp);
   gzrewind(fp->fp);
-  for(x=0; gzgetc(fp->fp) != EOF; x++);
+#if defined(WIN32)
+  for(x=0; gzgetc_(fp->fp) != EOF; x++);
+#else
+  for (x = 0; gzgetc(fp->fp) != EOF; x++);
+#endif
   gzseek(fp->fp,t,SEEK_SET);
   return(x);
  }

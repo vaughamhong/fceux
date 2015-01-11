@@ -25,8 +25,6 @@
 #include <stdint.h>
 #ifndef _MSC_VER
 #include <inttypes.h>
-#else
-typedef unsigned char bool;
 #endif
 
 #define TRUE 1

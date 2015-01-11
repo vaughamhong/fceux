@@ -88,7 +88,7 @@ struct snes_system_timing
 	double sample_rate;
 };
 
-typedef bool (*snes_environment_t)(unsigned cmd, void *data);
+typedef unsigned char(*snes_environment_t)(unsigned cmd, void *data);
 
 /* Must be called before calling snes_init().*/
 void snes_set_environment(snes_environment_t);
@@ -96,7 +96,7 @@ void snes_set_environment(snes_environment_t);
 typedef void (*snes_video_refresh_t)(const uint16_t *data, unsigned width, unsigned height);
 typedef void (*snes_audio_sample_t)(uint16_t left, uint16_t right);
 typedef void (*snes_input_poll_t)(void);
-typedef int16_t (*snes_input_state_t)(bool port, unsigned device, unsigned index, unsigned id);
+typedef int16_t(*snes_input_state_t)(unsigned char port, unsigned device, unsigned index, unsigned id);
 
 unsigned snes_library_revision_major(void);
 unsigned snes_library_revision_minor(void);
@@ -107,7 +107,7 @@ void snes_set_audio_sample(snes_audio_sample_t);
 void snes_set_input_poll(snes_input_poll_t);
 void snes_set_input_state(snes_input_state_t);
 
-void snes_set_controller_port_device(bool port, unsigned device);
+void snes_set_controller_port_device(unsigned char port, unsigned device);
 void snes_set_cartridge_basename(const char *basename);
 
 void snes_init(void);
@@ -117,40 +117,40 @@ void snes_reset(void);
 void snes_run(void);
 
 unsigned snes_serialize_size(void);
-bool snes_serialize(uint8_t *data, unsigned size);
-bool snes_unserialize(const uint8_t *data, unsigned size);
+unsigned char snes_serialize(uint8_t *data, unsigned size);
+unsigned char snes_unserialize(const uint8_t *data, unsigned size);
 
 void snes_cheat_reset(void);
-void snes_cheat_set(unsigned index, bool enabled, const char *code);
+void snes_cheat_set(unsigned index, unsigned char enabled, const char *code);
 
-bool snes_load_cartridge_normal(
+unsigned char snes_load_cartridge_normal(
   const char *rom_xml, const uint8_t *rom_data, unsigned rom_size
 );
 
-bool snes_load_cartridge_bsx_slotted(
+unsigned char snes_load_cartridge_bsx_slotted(
   const char *rom_xml, const uint8_t *rom_data, unsigned rom_size,
   const char *bsx_xml, const uint8_t *bsx_data, unsigned bsx_size
 );
 
-bool snes_load_cartridge_bsx(
+unsigned char snes_load_cartridge_bsx(
   const char *rom_xml, const uint8_t *rom_data, unsigned rom_size,
   const char *bsx_xml, const uint8_t *bsx_data, unsigned bsx_size
 );
 
-bool snes_load_cartridge_sufami_turbo(
+unsigned char snes_load_cartridge_sufami_turbo(
   const char *rom_xml, const uint8_t *rom_data, unsigned rom_size,
   const char *sta_xml, const uint8_t *sta_data, unsigned sta_size,
   const char *stb_xml, const uint8_t *stb_data, unsigned stb_size
 );
 
-bool snes_load_cartridge_super_game_boy(
+unsigned char snes_load_cartridge_super_game_boy(
   const char *rom_xml, const uint8_t *rom_data, unsigned rom_size,
   const char *dmg_xml, const uint8_t *dmg_data, unsigned dmg_size
 );
 
 void snes_unload_cartridge(void);
 
-bool snes_get_region(void);
+unsigned char snes_get_region(void);
 uint8_t* snes_get_memory_data(unsigned id);
 unsigned snes_get_memory_size(unsigned id);
 

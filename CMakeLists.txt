@@ -26,6 +26,7 @@ FILE(GLOB snes_src ${CMAKE_CURRENT_SOURCE_DIR}/libsnes-fceumm/*.c)
 FILE(GLOB snes_inc ${CMAKE_CURRENT_SOURCE_DIR}/libsnes-fceumm/*.h)
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/src)
+INCLUDE_DIRECTORIES(D:\\Work\\active\\laputa\\external\\nimble\\external\\zlib)
 
 set(src ${src} ${main_src})
 set(src ${src} ${boards_src})
@@ -51,13 +52,20 @@ source_group(mappers FILES ${mappers_src} ${mappers_inc})
 source_group(palettes FILES ${palettes_src} ${palettes_inc})
 source_group(snes FILES ${snes_src} ${snes_inc})
 
-add_definitions(-DHAVE_ASPRINTF)
 add_definitions(-DNDEBUG)
 add_definitions(-D__LIBSNES__)
 add_definitions(-DSOUND_QUALITY=0)
 add_definitions(-DPATH_MAX=1024)
+
+if(WIN32)
+add_definitions(-DINLINE=__inline)
+add_definitions(-DPSS_STYLE=2)
+else()
+add_definitions(-DHAVE_ASPRINTF)
 add_definitions(-DINLINE=inline)
 add_definitions(-DPSS_STYLE=1)
+endif()
+
 add_definitions(-DLSB_FIRST)
 add_definitions(-DLOCAL_LE=1)
 

@@ -15,7 +15,7 @@ struct memstream
    size_t m_size;
    size_t m_ptr;
    size_t m_max_ptr;
-   bool writing;
+   unsigned char writing;
 };
 
 static void memstream_update_ptr(memstream_t *stream)
@@ -24,7 +24,7 @@ static void memstream_update_ptr(memstream_t *stream)
       stream->m_max_ptr = stream->m_ptr;
 }
 
-static void memstream_init(memstream_t *stream, uint8_t *buffer, size_t max_size, bool writing)
+static void memstream_init(memstream_t *stream, uint8_t *buffer, size_t max_size, unsigned char writing)
 {
 	stream->m_buf = buffer;
 	stream->m_size = max_size;
@@ -44,7 +44,7 @@ size_t memstream_get_last_size(void)
    return g_last_file_size;
 }
 
-memstream_t *memstream_open(bool writing)
+memstream_t *memstream_open(unsigned char writing)
 {
    memstream_t *stream;
    if (!g_buffer || !g_size)
