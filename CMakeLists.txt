@@ -6,6 +6,13 @@
 # cmake -G "Visual Studio 12" ../
 # ================================================================
 
+# NOTES - for building for VS2012
+# FCEUX requires zlib - needs ZLIB_INCLUDE definition
+# FCEUX runtime library needs to be changed to /MT /MTd
+# FCEUX character set needs to be changed to Unicode
+
+# ================================================================
+
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 PROJECT(fceux)
 
